@@ -5,6 +5,8 @@ import time
 
 __version__ = '0.0.1'
 __author__ = 'Eli Uriegas'
+__email__ = 'seemethere101@gmail.com'
+__url__ = 'https://github.com/seemethere/retry'
 __license__ = 'MIT'
 
 _retries_error_msg = ('Exceeded maximum number of retries {} at '
@@ -31,6 +33,8 @@ def retry(exceptions=(Exception,), interval=0, max_retries=10, success=None):
     Raises:
         MaximumRetriesExceeded: Maximum number of retries hit without reaching
             the success criteria
+        TypeError: Both exceptions and success were left None causing the
+            decorator to have no valid exit criteria.
 
     Examples:
         Use it to decorate a function!
@@ -48,8 +52,8 @@ def retry(exceptions=(Exception,), interval=0, max_retries=10, success=None):
 
 
     """
-    if not exceptions and not success:
-        raise Exception(
+    if exceptions is None and success is None:
+        raise TypeError(
             '`exceptions` and `success` parameter can not both be None')
     # For python 3 compatability
     exceptions = exceptions or (_DummyException,)
