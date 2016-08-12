@@ -23,7 +23,7 @@ def retry(exceptions=(Exception,), interval=0, max_retries=10, success=None):
     """Decorator to retry a function 'max_retries' amount of times
 
     Args:
-        exceptions (:tuple:None, optional): Exceptions to be caught for retries
+        exceptions (tuple, optional): Exceptions to be caught for retries
         interval (int, optional): Interval between retries in seconds
         max_retries (int, optional): Maximum number of retries to have, if
             set to -1 the decorator will loop forever
@@ -48,10 +48,8 @@ def retry(exceptions=(Exception,), interval=0, max_retries=10, success=None):
         ArithmeticError...
         >>>foo(0)
         MaximumRetriesExceeded...
-
-
     """
-    if exceptions is None and success is None:
+    if not exceptions and success is None:
         raise TypeError(
             '`exceptions` and `success` parameter can not both be None')
     # For python 3 compatability
