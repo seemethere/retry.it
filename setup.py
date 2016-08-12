@@ -1,4 +1,5 @@
 from setuptools import setup
+
 import retry
 
 retry_classifiers = [
@@ -23,5 +24,6 @@ setup(
     long_description=description,
     license='MIT',
     classifiers=retry_classifiers,
-    test_requires=['pytest']
+    setup_requires=['pytest-runner'],
+    tests_requires=['pytest'],
 )
