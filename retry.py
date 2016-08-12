@@ -37,17 +37,24 @@ def retry(exceptions=(Exception,), interval=0, max_retries=10, success=None):
 
     Examples:
         Use it to decorate a function!
-        >>>@retry(exceptions=(ArithmeticError,), success=lambda x: x > 0)
-        >>>def foo(bar):
-        >>>    if bar < 0:
-        >>>        raise ArithmeticError('testing this')
-        >>>    return bar
-        >>>foo(5)
-        5
-        >>>foo(-1)
-        ArithmeticError...
-        >>>foo(0)
-        MaximumRetriesExceeded...
+
+        .. sourcecode:: python
+
+            from retry import retry
+
+            @retry(exceptions=(ArithmeticError,), success=lambda x: x > 0)
+            def foo(bar):
+                if bar < 0:
+                    raise ArithmeticError('testing this')
+                return bar
+            foo(5)
+            # Should return 5
+            foo(-1)
+            # Should raise ArithmeticError
+            foo(0)
+            # Should raise MaximumRetriesExceeded
+
+
     """
     if not exceptions and success is None:
         raise TypeError(
