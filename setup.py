@@ -14,7 +14,7 @@ retry_classifiers = [
 description = 'A small and simple library to retry functions'
 
 setup(
-    name='retry',
+    name='retry.it',
     version=retry.__version__,
     author=retry.__author__,
     author_email='seemethere101@gmail.com',
