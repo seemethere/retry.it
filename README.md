@@ -2,7 +2,7 @@
 [![PyPI](https://img.shields.io/pypi/v/retry.it.svg?maxAge=2592000)](https://pypi.python.org/pypi/retry.it)
 [![Documentation Status](https://readthedocs.org/projects/retryit/badge/?version=latest)](http://retryit.readthedocs.io/en/latest/?badge=latest)
 
-# retry.it, a simple retry library
+# :arrows_counterclockwise: retry.it, a simple retry library
 Ever wanted to retry a function but didn't want to implement fancy
 logic to do it?
 
