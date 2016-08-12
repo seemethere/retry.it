@@ -5,9 +5,6 @@ import time
 
 __version__ = '0.0.1'
 __author__ = 'Eli Uriegas'
-__email__ = 'seemethere101@gmail.com'
-__url__ = 'https://github.com/seemethere/retry'
-__license__ = 'MIT'
 
 _retries_error_msg = ('Exceeded maximum number of retries {} at '
                       'an interval of {}s for function {}')
