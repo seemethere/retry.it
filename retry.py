@@ -1,5 +1,6 @@
 """A simple python module to add a retry function decorator"""
 import functools
+import itertools
 import logging
 import time
 
@@ -24,7 +25,8 @@ def retry(exceptions=(Exception,), interval=0, max_retries=10, success=None):
     Args:
         exceptions (:tuple:None, optional): Exceptions to be caught for retries
         interval (int, optional): Interval between retries in seconds
-        max_retries (int, optional): Maximum number of retries to have
+        max_retries (int, optional): Maximum number of retries to have, if
+            set to -1 the decorator will loop forever
         success (function, optional): Function to indicate success criteria
 
     Raises:
@@ -60,10 +62,14 @@ def retry(exceptions=(Exception,), interval=0, max_retries=10, success=None):
         def wrapper(*args, **kwargs):
             run_func = functools.partial(func, *args, **kwargs)
             logger = logging.getLogger(func.__module__)
-            for num, _ in enumerate(range(max_retries), 1):
+            if max_retries < 0:
+                iterator = itertools.count()
+            else:
+                iterator = range(max_retries)
+            for num, _ in enumerate(iterator, 1):
                 try:
                     result = run_func()
-                    if success and not success(result):
+                    if success is not None and not success(result):
                         continue
                     return result
                 except exceptions as exception:
