@@ -22,20 +22,17 @@ class MaximumRetriesExceeded(Exception):
 def retry(exceptions=(Exception,), interval=0, max_retries=10, success=None):
     """Decorator to retry a function 'max_retries' amount of times
 
-    Args:
-        exceptions (tuple, optional): Exceptions to be caught for retries
-        interval (int, optional): Interval between retries in seconds
-        max_retries (int, optional): Maximum number of retries to have, if
-            set to -1 the decorator will loop forever
-        success (function, optional): Function to indicate success criteria
+    :param tuple exceptions: Exceptions to be caught for retries
+    :param int interval: Interval between retries in seconds
+    :param int max_retries: Maximum number of retries to have, if
+        set to -1 the decorator will loop forever
+    :param function success: Function to indicate success criteria
+    :raises MaximumRetriesExceeded: Maximum number of retries hit without
+        reaching the success criteria
+    :raises TypeError: Both exceptions and success were left None causing the
+        decorator to have no valid exit criteria.
 
-    Raises:
-        MaximumRetriesExceeded: Maximum number of retries hit without reaching
-            the success criteria
-        TypeError: Both exceptions and success were left None causing the
-            decorator to have no valid exit criteria.
-
-    Examples:
+    Example:
         Use it to decorate a function!
 
         .. sourcecode:: python
@@ -53,8 +50,6 @@ def retry(exceptions=(Exception,), interval=0, max_retries=10, success=None):
             # Should raise ArithmeticError
             foo(0)
             # Should raise MaximumRetriesExceeded
-
-
     """
     if not exceptions and success is None:
         raise TypeError(
