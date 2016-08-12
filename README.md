@@ -24,6 +24,7 @@ pip install retry.it
 
 # Examples
 
+### Use it as a decorator!
 Send a `GET` request to a URL until it returns a status code of 200!
 Rest a second between tries
 ```python
@@ -35,6 +36,26 @@ from retry import retry
 def poll_url(url, method='GET'):
     return requests.request(method, url)
 ```
+
+### Use it as a wrapper!
+Send any type of request to a URL until it returns a status code set by the
+user!
+```python
+import requests
+
+from retry import retry
+
+def poll_url(url, method='GET'):
+    return requests.request(method, url)
+
+def poll_url_with_retries(
+        url, method='GET', max_retries=-1, interval=1, status_code=200):
+    return retry(
+        max_retries=max_retries,
+        interval=interval,
+        success=lambda x: x.status_code == status_code)(poll_url)(url, method)
+```
+
 
 # Contributing
 1. Fork the repo
