@@ -10,18 +10,18 @@ retry_classifiers = [
     'Topic :: Utilities',
 ]
 
-with open('README', 'r') as fp:
-    retry_long_description = fp.read()
+description = 'A small and simple library to retry functions'
 
 setup(
     name='retry',
     version=retry.__version__,
     author=retry.__author__,
-    author_email='seemethere101@gmail.com',
-    url='https://github.com/seemethere/retry',
+    author_email=retry.__email__,
+    url=retry.__url__,
     py_modules=['retry'],
-    description='A small and simple library to retry functions',
-    long_description=retry_long_description,
+    description=description,
+    long_description=description,
     license=retry.__license__,
-    classifiers=retry_classifiers
+    classifiers=retry_classifiers,
+    test_requires=['pytest']
 )
