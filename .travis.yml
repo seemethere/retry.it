@@ -3,6 +3,10 @@ python:
   - "2.7"
   - "3.5"
 # command to install dependencies
-install: "python setup.py install"
+install:
+  - "python setup.py install"
+  - "pip install flake8"
+# flake8 check
+before_script: "flake8 retry.py"
 # command to run tests
 script: "python setup.py test"
