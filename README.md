@@ -38,6 +38,18 @@ def poll_url(url, method='GET'):
     return requests.request(method, url)
 ```
 
+### Use it with a timeout!
+Same function as above, timeout after 10 seconds!
+```python
+import requests
+
+from retry import retry
+
+@retry(max_retries=-1, interval=1, success=lambda x: x.status_code == 200, timeout=10)
+def poll_url(url, method='GET'):
+    return requests.request(method, url)
+```
+
 ### Use it as a wrapper!
 Send any type of request to a URL until it returns a status code set by the
 user!
@@ -54,7 +66,8 @@ def poll_url_with_retries(
     return retry(
         max_retries=max_retries,
         interval=interval,
-        success=lambda x: x.status_code == status_code)(poll_url)(url, method)
+        success=lambda x: x.status_code == status_code
+        timeout=10)(poll_url)(url, method)
 ```
 
 
