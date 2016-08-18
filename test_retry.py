@@ -33,3 +33,10 @@ def test_execution():
 def test_invalid_parameters():
     with pytest.raises(TypeError):
         retry.retry(exceptions=None, success=None)(foo)
+
+
+def test_timeout():
+    foo_with_timeout = retry.retry(
+        success=lambda x: x > 0, timeout=5, interval=1)(foo)
+    with pytest.raises(retry.MaximumTimeoutExceeded):
+        foo_with_timeout(-1)
