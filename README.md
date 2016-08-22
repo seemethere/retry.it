@@ -23,6 +23,16 @@ Have a function that you just want to run over and over again? **retry.it!**
 pip install retry.it
 ```
 
+# Features
+* Functions can be retried based on:
+  * Success criteria (like a status code not equaling 200)
+  * Exceptions (like a function raising a requests.RequestException)
+    * All accepted exceptions raise the original exception on failure as well!
+* Functions can fail based on:
+  * Maximum number of retries exceeded
+  * Maximum timeout achieved
+* Function retries can be spaced apart at a specific interval
+
 # Examples
 
 ### Use it as a decorator!
