@@ -45,7 +45,23 @@ import requests
 
 from retry import retry
 
-@retry(max_retries=-1, interval=1, success=lambda x: x.status_code == 200, timeout=10)
+@retry(
+    max_retries=-1, interval=1, success=lambda x: x.status_code == 200,
+    timeout=10)
+def poll_url(url, method='GET'):
+    return requests.request(method, url)
+```
+
+### Use it with Exceptions!
+Same function as above, timeout after 10 seconds!
+```python
+import requests
+
+from retry import retry
+
+@retry(
+    exceptions=(requests.RequestException,), max_retries=-1, interval=1,
+    success=lambda x: x.status_code == 200, timeout=10)
 def poll_url(url, method='GET'):
     return requests.request(method, url)
 ```
