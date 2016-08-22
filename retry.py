@@ -5,7 +5,7 @@ import itertools
 import logging
 import time
 
-__version__ = '1.0'
+__version__ = '1.1'
 __author__ = 'Eli Uriegas'
 
 _retries_error_msg = ('Exceeded maximum number of retries {} at '
