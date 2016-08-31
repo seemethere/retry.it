@@ -24,6 +24,7 @@ setup(
     long_description=description,
     license='MIT',
     classifiers=retry_classifiers,
+    install_requires=['decorator'],
     setup_requires=['pytest-runner'],
     tests_requires=['pytest'],
 )
