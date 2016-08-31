@@ -1,6 +1,7 @@
 from setuptools import setup
 
-import retry
+__version__ = '1.2'
+__author__ = 'Eli Uriegas'
 
 retry_classifiers = [
     'Programming Language :: Python :: 2',
@@ -15,8 +16,8 @@ description = 'A small and simple library to retry functions'
 
 setup(
     name='retry.it',
-    version=retry.__version__,
-    author=retry.__author__,
+    version=__version__,
+    author=__author__,
     author_email='seemethere101@gmail.com',
     url='https://github.com/seemethere/retry',
     py_modules=['retry'],
