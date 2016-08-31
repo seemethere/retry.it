@@ -7,7 +7,7 @@ import time
 
 from decorator import decorator
 
-__version__ = '1.0'
+__version__ = '1.2'
 __author__ = 'Eli Uriegas'
 
 _retries_error_msg = ('Exceeded maximum number of retries {} at '
