@@ -1,3 +1,4 @@
+from datetime import datetime
 import pytest
 
 import retry
@@ -9,6 +10,13 @@ def foo(bar):
     if bar < 0:
         raise ArithmeticError(exception_message)
     return bar
+
+dummy_global = 0
+
+def baz():
+    global dummy_global
+    dummy_global += 1
+    return dummy_global
 
 
 def test_success_criteria():
@@ -28,6 +36,13 @@ def test_execution():
     foo_with_both = retry.retry(
         exceptions=(ArithmeticError,), success=lambda x: x > 0)(foo)
     assert foo_with_both(1) == 1
+
+def test_interval():
+    baz_with_interval = retry.retry(success=lambda x: x > 5, interval=1)(baz)
+    start = datetime.now()
+    baz_with_interval()
+    elapsed = datetime.now() - start
+    assert elapsed.seconds >= 5
 
 
 def test_invalid_parameters():

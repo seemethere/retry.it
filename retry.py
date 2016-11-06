@@ -82,9 +82,8 @@ def retry(
                     _timeout_error_msg.format(timeout, func.__name__))
             try:
                 result = run_func()
-                if success is not None and not success(result):
-                    continue
-                return result
+                if success is None or success(result):
+                    return result
             except exceptions as exception:
                 logger.exception(exception)
                 if num == max_retries:
