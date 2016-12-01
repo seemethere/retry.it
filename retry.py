@@ -89,7 +89,7 @@ def retry(
                 result = run_func()
                 if success is None or success(result):
                     return result
-            except exceptions as exception:
+            except exceptions:
                 logger.exception(
                     'Exception experienced when trying function {}'.format(
                         func.__name__))
