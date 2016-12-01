@@ -1,17 +1,11 @@
 """A simple python module to add a retry function decorator"""
-from datetime import datetime
 import functools
 import itertools
 import logging
+import signal
 import time
 
 from decorator import decorator
-
-
-_retries_error_msg = ('Exceeded maximum number of retries {} at '
-                      'an interval of {}s for function {}')
-
-_timeout_error_msg = 'Maximum timeout of {}s reached for function {}'
 
 
 class _DummyException(Exception):
@@ -24,6 +18,12 @@ class MaximumRetriesExceeded(Exception):
 
 class MaximumTimeoutExceeded(Exception):
     pass
+
+
+def _timeout(msg):
+    def __internal_timeout(signum, frame):
+        raise MaximumTimeoutExceeded(msg)
+    return __internal_timeout
 
 
 def retry(
@@ -66,26 +66,33 @@ def retry(
             '`exceptions` and `success` parameter can not both be None')
     # For python 3 compatability
     exceptions = exceptions or (_DummyException,)
+    _retries_error_msg = ('Exceeded maximum number of retries {} at '
+                          'an interval of {}s for function {}')
+
+    _timeout_error_msg = 'Maximum timeout of {}s reached for function {}'
 
     @decorator
     def wrapper(func, *args, **kwargs):
-        start = datetime.now()
+        signal.signal(
+            signal.SIGALRM, _timeout(
+                _timeout_error_msg.format(timeout, func.__name__)))
         run_func = functools.partial(func, *args, **kwargs)
         logger = logging.getLogger(func.__module__)
         if max_retries < 0:
             iterator = itertools.count()
         else:
             iterator = range(max_retries)
+        if timeout > 0:
+            signal.alarm(timeout)
         for num, _ in enumerate(iterator, 1):
-            if 0 < timeout <= (datetime.now() - start).seconds:
-                raise MaximumTimeoutExceeded(
-                    _timeout_error_msg.format(timeout, func.__name__))
             try:
                 result = run_func()
                 if success is None or success(result):
                     return result
             except exceptions as exception:
-                logger.exception(exception)
+                logger.exception(
+                    'Exception experienced when trying function {}'.format(
+                        func.__name__))
                 if num == max_retries:
                     raise
             logger.warning(
