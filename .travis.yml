@@ -1,12 +1,18 @@
 language: python
 python:
-  - "2.7"
-  - "3.5"
-# command to install dependencies
+  - '2.7'
+  - '3.5'
 install:
-  - "python setup.py install"
-  - "pip install flake8"
-# flake8 check
-before_script: "flake8 retry.py"
-# command to run tests
-script: "python setup.py test"
+  - python setup.py install
+  - pip install flake8
+before_script: flake8 retry.py
+script: python setup.py test
+deploy:
+  provider: pypi
+  user: seemethere
+  password:
+    secure: cQjtMl3xc1ybf4T1i7L0SuGOraxyvzUL0INOmT8AE1bZOzpFlJ852YWcX8xH0GEI7i4f5axAVLnkvYEqvSZp4BuoygII2VKVkB5N/TjIOnFAqRTwdonhwnmIS9hkURcr2nlCuJC2a6hmf1sqtCTb2GHlTuKSfUTYZfBgDF7x0lBGD2dvego3YR9bao8s+1ECJP9CZIeJrkX+zNboWb2td/EafrQf5JofodsMJLDSrCxXlQ32rknE0n5fjdDqsPp7N8VBSRz+obPT57futBLFcge9YSBWBh16sz9rN71sb6/tCau6V/lKw8K3B/ksmUETqXBWXmL4IJayO+zLOXsRoVlgElTKLRFeoATbzlkq4v7WZeZm35SDGRBbctsALqc0yuI7PwCXThI6OAsNBDpYmjMkI6732hmUneenVK5D01Sjq54fRNhotAcR8O6GefPuNg32umlSVw5SaqdUAXGLkeS1ccL2QCN0fYOGYx+G59AHlJqFKhtwFzX/kbdQZf+N8GM/ex44XNI5EwWW2wAWq5MlTAr6rPled+D8K1tsFSAkKf+YCIDZpDnmyE260ieVLdYf91Mo+1Hm0KKKgAuWpTN/WNm1Hsd2SW947pWAUKmXAZn3bDg2Mvd6CkQznHLYpEHgHHL6R/pfW7Opudu6J3SpCRRzv/1++mTUpCTUats=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: seemethere/retry.it
