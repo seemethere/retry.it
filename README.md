@@ -17,6 +17,8 @@ Have a function that needs to poll a website `x` times to check if something is 
 
 Have a function that you just want to run over and over again? **retry.it!**
 
+NOTE: Compatability for Windows is not yet available
+
 # Installation
 
 ```shell
