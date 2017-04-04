@@ -112,5 +112,5 @@ something I could understand and extend easily. Enter `retry.it`!
 simple!
 
 # Alternatives
-- [retrying](https://github.com/rholder/retrying())
+- [retrying](https://github.com/rholder/retrying)
 - [retry](https://github.com/invl/retry)
