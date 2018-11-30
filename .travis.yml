@@ -1,17 +1,17 @@
 language: python
 python:
-  - '2.7'
-  - '3.5'
+- '2.7'
+- '3.5'
 install:
-  - python setup.py install
-  - pip install flake8
+- python setup.py install
+- pip install flake8
 before_script: flake8 retry.py
 script: python setup.py test
 deploy:
   provider: pypi
   user: seemethere
   password:
-    secure: CBJpuLcwyzvp7+EZ1bKWDor7OVGmmDlrh1V8iAZOK4C5CH4S11a6FglGbofLxbu+TZgzBTRY8+QOUxkMotrw1FnuOKBYlEvLB/HLdFNk4WDQwr+liy4YxyFl0kK9AxQ+w36w6INAdNyeTY/y11YGvSh9HjDqwZY7vhBIZoh6iI9DFiKQ3nxAp0QSggpAnb8HiIg4kSdubzqgwUi/KOnciTf0D3ZRXmUqL9VHONuhxDBjJjUGZe+PnAcBnBTdUrw+T1gZh052y8qQDlaliSNyXnHjIhWUosX9/Mng+8YH3a0DkS+DXBQaPP/WzKggcXVP9llLe+4jBWMpH/UL8Ly0gqNz40rhhunHN3J7EHRIc1rlQb1ToqYdJEX5e+WwUDhl8Afl4POadFwwlGzRH0XYZpXFTADtOS8U+zJi9zS5+eTc1GWNKEMj9sxatAUYHooX0/FVCoDv4DWYzgx1W+187d/ujkAntI67uI9mHc71AZAVdWK3B+7Iunj4sjKe29ivwPYZ1Ssw8xyBTf+dChNCW6Q/lZLoKKPvP3FFwg5g9zN/JWGhI2ThWbbo67535v3viR9o0BEzM2lhU3XUTLrZ8PzwYEjCZjh126hZ/cXBjNZECjhyZ/Wong/92OYBB0Xt7CKLsvbfznbKK8gy5Ml1rMqF9Ed36TGG4lUTbSnOE20=
+    secure: gm+8oCNxlRAtn0djYIMTzzgHz0qu0FEV2fQn7ffJjxeBxRjYjQm4c8egBOFZKgG4NOD70dsD6KsvjDkpKWh0wFSYeMYTzcGtnTl7AHYIgwJLSmjaqV//e1hHW9hH2x6UV1flOrGB+V7BJG/1gH9DDgB9YqvHhYQcQXs3svSxppvmcuojp+PoHjiGZ+IanUjPrvAHf6ZhGbcefNwOPfHOeET2eoOZ0kTxSI/SMsdrJy0xGbAQyQxbxYbhIuVUVJmHu6de7/K39DuAEkBaGWWOys+jCMJhqhl0KIeFks0gk3uK5z8+m6PRL+WyLYsMGzLqF6YUjcybsFdOZPcXdmaleP52zG0KrJCzh2y265BUNnqTwSDh3Y9d689dVSP4OwqfruStdc1AhRU9dDRLaceMOWZuEeYf+kyhURQwFWrZApRq0iMBokW73MNFoOYGVDLrHOdWETIpJ+pZHTkhxCT1sapshXm/plxn94WiwnHbEFBfzCk9lEA7VTxukRxkrDrSLF2bAF03PELoMnFUado4YmBgktur7JOTfQXi7uDk8+J7yDVNheyPUpnmdxiWu2WfBPV9FdHIVxkdjzKVs18g6EB6sqobeVr3XSj24WqxW3TGDTUssob1l54sxAql9R4qSAJAmsd46sfSa/wZ/55Biy6RALqrStpqstBB7edkbJw=
   on:
     tags: true
     distributions: sdist bdist_wheel
