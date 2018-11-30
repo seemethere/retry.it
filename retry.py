@@ -88,6 +88,7 @@ def retry(
             try:
                 result = run_func()
                 if success is None or success(result):
+                    signal.alarm(0)
                     return result
             except exceptions:
                 logger.exception(

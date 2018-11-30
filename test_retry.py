@@ -1,4 +1,6 @@
 from datetime import datetime
+from time import sleep
+
 import pytest
 
 import retry
@@ -75,3 +77,10 @@ def test_successful_timeout():
         _test_func({'num': 0})
     except retry.MaximumTimeoutExceeded:
         pytest.fail('Expected the timeout not to be exceeded')
+
+
+def test_disarm_signal_on_success():
+    """Success with a timeout disarms signal"""
+    _test_func = retry.retry(success=lambda x: True, timeout=1, interval=0.5)(foo)
+    _test_func(1)
+    sleep(1.2)
