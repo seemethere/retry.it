@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__version__ = '1.4'
+__version__ = '1.5'
 __author__ = 'Eli Uriegas'
 
 retry_classifiers = [
