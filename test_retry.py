@@ -1,4 +1,5 @@
 from datetime import datetime
+from threading import Thread
 from time import sleep
 
 import pytest
@@ -84,3 +85,41 @@ def test_disarm_signal_on_success():
     _test_func = retry.retry(success=lambda x: True, timeout=1, interval=0.5)(foo)
     _test_func(1)
     sleep(1.2)
+
+
+def test_successful_thread():
+    """Success with function as thread"""
+    retryed = 0
+
+    @retry.retry(timeout=1, success=lambda x: x == 3)
+    def f():
+        nonlocal retryed
+        retryed += 1
+        return retryed
+
+    t = Thread(target=f)
+    t.start()
+    t.join()
+    assert 3 == retryed
+
+
+def test_unsuccessful_thread():
+    """Unsuccessful with function as thread, timed out"""
+    retryed = 0
+
+    def foo():
+        @retry.retry(timeout=1, success=lambda x: False)
+        def bar():
+            nonlocal retryed
+            sleep(0.2)
+            retryed += 1
+            return retryed
+        with pytest.raises(retry.MaximumTimeoutExceeded):
+            bar()
+
+    t = Thread(target=foo)
+    t.start()
+    t.join()
+    assert 3 <= retryed <= 5
+
+
