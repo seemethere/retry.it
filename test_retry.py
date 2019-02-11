@@ -93,7 +93,7 @@ def test_successful_thread():
 
     @retry.retry(timeout=1, success=lambda x: x == 3)
     def f():
-        nonlocal retryed
+        global retryed
         retryed += 1
         return retryed
 
@@ -110,7 +110,7 @@ def test_unsuccessful_thread():
     def foo():
         @retry.retry(timeout=1, success=lambda x: False)
         def bar():
-            nonlocal retryed
+            global retryed
             sleep(0.2)
             retryed += 1
             return retryed
