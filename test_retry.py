@@ -89,37 +89,35 @@ def test_disarm_signal_on_success():
 
 def test_successful_thread():
     """Success with function as thread"""
-    retryed = 0
+    retryed = []
 
-    @retry.retry(timeout=1, success=lambda x: x == 3)
-    def f():
-        global retryed
-        retryed += 1
+    @retry.retry(timeout=1, success=lambda x: len(x) == 3)
+    def f(retryed):
+        retryed.append(0)
         return retryed
 
-    t = Thread(target=f)
+    t = Thread(target=f, args=[retryed])
     t.start()
     t.join()
-    assert 3 == retryed
+    assert 3 == len(retryed)
 
 
 def test_unsuccessful_thread():
     """Unsuccessful with function as thread, timed out"""
-    retryed = 0
+    retryed = []
 
-    def foo():
+    def foo(retryed):
         @retry.retry(timeout=1, success=lambda x: False)
-        def bar():
-            global retryed
+        def bar(retryed):
             sleep(0.2)
-            retryed += 1
-            return retryed
-        with pytest.raises(retry.MaximumTimeoutExceeded):
-            bar()
+            retryed.append(0)
 
-    t = Thread(target=foo)
+        with pytest.raises(retry.MaximumTimeoutExceeded):
+            bar(retryed)
+
+    t = Thread(target=foo, args=[retryed])
     t.start()
     t.join()
-    assert 3 <= retryed <= 5
+    assert 3 <= len(retryed) <= 5
 
 
