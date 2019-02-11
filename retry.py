@@ -107,7 +107,9 @@ def retry(
             if timer:
                 r_state = p.poll(interval * 1000)
                 if r_state and r_state[0][1] & POLLIN:
-                    raise MaximumTimeoutExceeded(_timeout_error_msg.format(timeout, func.__name__))
+                    raise MaximumTimeoutExceeded(
+                        _timeout_error_msg.format(timeout, func.__name__)
+                                                 )
             else:
                 time.sleep(interval)
         else:
