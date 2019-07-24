@@ -2,7 +2,9 @@
 import functools
 import itertools
 import logging
-import signal
+import os
+from select import poll, POLLIN
+from threading import Timer
 import time
 
 from decorator import decorator
@@ -20,10 +22,9 @@ class MaximumTimeoutExceeded(Exception):
     pass
 
 
-def _timeout(msg):
-    def __internal_timeout(signum, frame):
-        raise MaximumTimeoutExceeded(msg)
-    return __internal_timeout
+def _timeout(pipe_w):
+    with os.fdopen(pipe_w, 'w') as p:
+        p.write('stop')
 
 
 def retry(
@@ -73,22 +74,26 @@ def retry(
 
     @decorator
     def wrapper(func, *args, **kwargs):
-        signal.signal(
-            signal.SIGALRM, _timeout(
-                _timeout_error_msg.format(timeout, func.__name__)))
         run_func = functools.partial(func, *args, **kwargs)
         logger = logging.getLogger(func.__module__)
         if max_retries < 0:
             iterator = itertools.count()
         else:
             iterator = range(max_retries)
+        timer = None
         if timeout > 0:
-            signal.alarm(timeout)
+            r, w = os.pipe()
+            timer = Timer(timeout, _timeout, [w])
+            timer.start()
+            p = poll()
+            p.register(r, POLLIN)
+
         for num, _ in enumerate(iterator, 1):
             try:
                 result = run_func()
                 if success is None or success(result):
-                    signal.alarm(0)
+                    if timer:
+                        timer.cancel()
                     return result
             except exceptions:
                 logger.exception(
@@ -99,7 +104,14 @@ def retry(
             logger.warning(
                 'Retrying {} in {}s...'.format(
                     func.__name__, interval))
-            time.sleep(interval)
+            if timer:
+                r_state = p.poll(interval * 1000)
+                if r_state and r_state[0][1] & POLLIN:
+                    raise MaximumTimeoutExceeded(
+                        _timeout_error_msg.format(timeout, func.__name__)
+                                                 )
+            else:
+                time.sleep(interval)
         else:
             raise MaximumRetriesExceeded(
                 _retries_error_msg.format(
